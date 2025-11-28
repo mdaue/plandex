@@ -1,6 +1,6 @@
 services:
   plandex-postgres:
-    image: postgres:latest
+    image: postgres:15
     restart: always
     environment:
       POSTGRES_PASSWORD: plandex
@@ -19,6 +19,8 @@ services:
     #   dockerfile: server/Dockerfile
     volumes:
       - plandex-files:/plandex-server
+      - $HOME/.config/plandex/config.yaml:/etc/plandex/config.yaml:ro
+      - $HOME/.config/plandex/router:/etc/plandex/router:ro
     ports:
       - "8099:8099"
       - "4000:4000"
@@ -28,6 +30,8 @@ services:
       LOCAL_MODE: 1
       PLANDEX_BASE_DIR: /plandex-server
       OLLAMA_BASE_URL: http://host.docker.internal:11434
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+      OLLAMA_HOST: http://ollama:11434
       
     extra_hosts:
       - "host.docker.internal:host-gateway"
